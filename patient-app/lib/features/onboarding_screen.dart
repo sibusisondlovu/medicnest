@@ -114,7 +114,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           });
 
           if (currentIndex == controller.items.length - 1) {
-            Navigator.pushReplacementNamed(context, 'welcomeScreen');
+            Navigator.pushReplacementNamed(context, 'getStartedScreen');
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setBool('first_time', false);
           }

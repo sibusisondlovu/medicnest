@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../config/strings.dart';
+
 class GetStartedScreen extends StatelessWidget {
   const GetStartedScreen({super.key});
+  static const String id = "getStartedScreen";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-
           Positioned.fill(
             child: Image.asset(
               'assets/images/welcome_screen_background.jpg',
@@ -26,11 +28,11 @@ class GetStartedScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 60.0),
+                padding: const EdgeInsets.only(top: 100.0),
                 child: Center(
                   child: Image.asset(
                     'assets/images/logo.png',
-                    height: 50,
+                    height: 250,
                   ),
                 ),
               ),
@@ -57,16 +59,21 @@ class GetStartedScreen extends StatelessWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 32),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Navigate to create account screen
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
-                        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+                    const SizedBox(height: 100),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'createAccountScreen');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Strings.mainColor,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 32.0),
+                        ),
+                        child: const Text('CREATE ACCOUNT'),
                       ),
-                      child: const Text('CREATE ACCOUNT'),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
@@ -81,7 +88,7 @@ class GetStartedScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 60), 
+              const SizedBox(height: 60),
             ],
           ),
         ],
