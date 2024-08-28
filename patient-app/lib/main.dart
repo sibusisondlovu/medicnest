@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'config/theme.dart';
 import 'config/routes.dart';
+import 'screens/home_screen.dart';
 import 'wrapper.dart';
 
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: Wrapper.id,
+      initialRoute: HomeScreen.id,
     );
   }
 }

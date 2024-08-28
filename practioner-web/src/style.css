@@ -1,0 +1,25 @@
+body {
+  color: #343a40; /* Dark grey color */
+}
+
+.btn-primary {
+  background-color: #313ca2; /* Your custom primary color */
+  border-color: #313ca2; /* Border color */
+}
+
+/* Override Bootstrap secondary button color */
+.btn-secondary {
+  background-color: #ec04a2; /* Your custom secondary color */
+  border-color: #ec04a2; /* Border color */
+}
+
+a {
+  color: #313ca2; /* Your custom color */
+  text-decoration: none; /* Optionally remove underline */
+}
+
+/* Override anchor tag hover color */
+a:hover {
+  color: #ec04a2; /* Your custom hover color */
+  text-decoration: underline; /* Optionally add underline on hover */
+}

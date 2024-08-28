@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'config/strings.dart';
-import 'features/onboarding_screen.dart';
+import 'screens/onboarding_screen.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});
@@ -23,7 +23,6 @@ class _WrapperScreenState extends State<Wrapper> {
           // Handle any errors
           return Scaffold(body: Center(child: Text('Error: ${snapshot.error}')));
         } else {
-          // Decide where to navigate based on the result
           final bool isFirstTime = snapshot.data!;
           return isFirstTime ? const OnBoardingScreen() : const OnBoardingScreen();
         }

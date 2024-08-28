@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:patient_app/features/get_started_screen.dart';
-
-import '../features/create_account_screen.dart';
+import 'package:patient_app/screens/home_screen.dart';
+import '../screens/create_account_screen.dart';
+import '../screens/get_started_screen.dart';
 import '../wrapper.dart';
 
 
@@ -18,6 +18,9 @@ class RouteGenerator {
 
       case CreateAccountScreen.id:
         return _route(const CreateAccountScreen());
+
+      case HomeScreen.id:
+        return _route(const HomeScreen());
 
       default:
         return _errorRoute(settings.name);
