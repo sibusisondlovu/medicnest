@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'config/theme.dart';
 import 'config/routes.dart';
+import 'screens/edit_profile_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/medical_journey_screen.dart';
 import 'wrapper.dart';
 
 
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: HomeScreen.id,
+      initialRoute: EditProfileScreen.id,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patient_app/config/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/strings.dart';
@@ -55,7 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     //Titles
                     Text(controller.items[currentIndex].title,
                       style: const TextStyle(fontSize: 25,
-                          color: Strings.mainColor,
+                          color: AppTheme.mainColor,
                           fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,),
 
@@ -85,7 +86,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 2),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: currentIndex == index ? Strings.mainColor : Colors.grey,
+                color: currentIndex == index ? AppTheme.mainColor : Colors.grey,
               ),
               height: 7,
               width: currentIndex == index ? 30 : 7,
@@ -104,7 +105,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       height: 55,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Strings.mainColor
+          color: AppTheme.mainColor
       ),
 
       child: TextButton(

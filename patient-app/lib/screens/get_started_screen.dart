@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config/strings.dart';
+import '../config/theme.dart';
 
 class GetStartedScreen extends StatelessWidget {
   const GetStartedScreen({super.key});
@@ -68,7 +69,7 @@ class GetStartedScreen extends StatelessWidget {
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor: Strings.mainColor,
+                          backgroundColor: AppTheme.mainColor,
                           padding: const EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 32.0),
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../config/strings.dart';
+import '../config/theme.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -58,7 +59,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Strings.mainColor,Strings.ascentColor, ],
+          colors: [AppTheme.mainColor,AppTheme.ascentColor, ],
         )),
         child: Column(
           children: [

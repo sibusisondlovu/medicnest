@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:patient_app/screens/home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/strings.dart';
+import 'config/theme.dart';
 import 'screens/onboarding_screen.dart';
 
 class Wrapper extends StatefulWidget {
@@ -18,21 +22,22 @@ class _WrapperScreenState extends State<Wrapper> {
       future: checkFirstTime(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator(color: Strings.mainColor, strokeWidth: 2,)));
+          return const Scaffold(body: Center(child: CircularProgressIndicator(color: AppTheme.mainColor, strokeWidth: 2,)));
         } else if (snapshot.hasError) {
           // Handle any errors
           return Scaffold(body: Center(child: Text('Error: ${snapshot.error}')));
         } else {
           final bool isFirstTime = snapshot.data!;
-          return isFirstTime ? const OnBoardingScreen() : const OnBoardingScreen();
+          final  isAuthenticated = FirebaseAuth.instance.currentUser;
+          return isFirstTime ? const OnBoardingScreen() :
+          isAuthenticated == null? const LoginScreen() : const HomeScreen();
         }
       },
     );
   }
 
   Future<bool> checkFirstTime() async {
-    return true;
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // return prefs.getBool('first_time') ?? true; // Default value is true if key doesn't exist
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+     return prefs.getBool('first_time') ?? true; // Default value is true if key doesn't exist
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:patient_app/screens/home_screen.dart';
 import '../screens/create_account_screen.dart';
+import '../screens/edit_profile_screen.dart';
 import '../screens/get_started_screen.dart';
+import '../screens/medical_journey_screen.dart';
 import '../wrapper.dart';
 
 
@@ -21,6 +23,12 @@ class RouteGenerator {
 
       case HomeScreen.id:
         return _route(const HomeScreen());
+
+      case EditProfileScreen.id:
+        return _route(const EditProfileScreen());
+
+      case MedicalJourneyScreen.id:
+        return _route(const MedicalJourneyScreen());
 
       default:
         return _errorRoute(settings.name);
