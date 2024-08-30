@@ -16,10 +16,12 @@ class HealthTipCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(imageUrl, height: 150, fit: BoxFit.cover),
+            child: Image.asset(imageUrl, width: MediaQuery.of(context).size.width,  height: 150, fit: BoxFit.cover),
           ),
           const SizedBox(height: 8),
-          Text(title, maxLines: 2, overflow: TextOverflow.ellipsis),
+          Text(title, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(
+            fontWeight: FontWeight.bold
+          ),),
         ],
       ),
     );

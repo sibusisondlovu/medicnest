@@ -14,7 +14,7 @@ class ActionButton extends StatelessWidget {
         children: [
           Icon(icon, size: 40, color: Theme.of(context).primaryColor),
           const SizedBox(height: 8),
-          Text(title, textAlign: TextAlign.center),
+          Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),),
         ],
       ),
     );

@@ -23,6 +23,9 @@ dependencies:
   flutter_spinkit: ^5.2.1
   pinput: ^4.0.0
   awesome_dialog: ^3.2.1
+  easy_stepper: ^0.8.5+1
+  image_picker: ^1.1.2
+  firebase_storage: ^11.6.0
 
 
 dev_dependencies:

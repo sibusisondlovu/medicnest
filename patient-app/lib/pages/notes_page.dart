@@ -15,8 +15,12 @@ class _NotesPageState extends State<NotesPage> {
       children: [
 
         Image.asset('assets/images/health-report.png', width: MediaQuery.of(context).size.width * 0.5,),
-        const Text("You have no notes history",),
-        const Text(textAlign: TextAlign.center, 'Start consulting with our doctors and your \nhealth records wil be kept here.')
+        const Text("You have no notes history", style: TextStyle(
+            fontSize: 13
+        ),),
+        const Text(textAlign: TextAlign.center, 'Start consulting with our doctors and your \nhealth records wil be kept here.', style: TextStyle(
+            fontSize: 13
+        ),)
       ],
     );
   }

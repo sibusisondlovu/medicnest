@@ -15,15 +15,16 @@ class AppTheme {
     hintColor: ascentColor,
       fontFamily: 'Poppins',
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        selectedItemColor: mainColor, // Or a different color for dark theme
-        unselectedItemColor: mainColor.withOpacity(0.6), // Optional
+        selectedItemColor: ascentColor, // Or a different color for dark theme
+        unselectedItemColor: ascentColor.withOpacity(0.6), // Optional
       ),
     scaffoldBackgroundColor:Colors.white,
       iconTheme: const IconThemeData(
         color: mainColor, // Or a different color for dark theme
       ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: mainColor,
+      elevation: 0,
+      backgroundColor: Colors.transparent,
       centerTitle: true, // Center the title
       titleTextStyle: TextStyle(
         fontSize: 16.0, // Set font size

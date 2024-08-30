@@ -12,11 +12,17 @@ class ActionButtonsGrid extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       children: [
-        ActionButton(icon: Icons.assignment, title: 'Medical Journey'),
-        ActionButton(icon: Icons.favorite, title: 'Ask Health Question'),
-        ActionButton(icon: Icons.group, title: 'Invite Your Friends'),
-        ActionButton(icon: Icons.local_pharmacy, title: 'Your Pharmacy Order'),
-        ActionButton(icon: Icons.location_on, title: 'Find Pharmacy'),
+        GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, 'medicalJourneyScreen');
+            },
+            child: ActionButton(icon: Icons.assignment, title: 'Medical Journey')),
+        GestureDetector(
+            onTap: (){
+              Navigator.pushNamed(context, 'askQuestionScreen');
+            },
+            child: ActionButton(icon: Icons.favorite, title: 'Ask Health Question')),
+        ActionButton(icon: Icons.location_on, title: 'Find Doctor or Pharmacy'),
       ],
     );
   }

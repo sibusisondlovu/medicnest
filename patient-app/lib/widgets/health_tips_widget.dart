@@ -26,13 +26,17 @@ class HealthTipsSection extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: const [
-              HealthTipCard(
-                title: 'Helicobacter Pylori infection of the stomach',
-                imageUrl: 'https://example.com/image1.jpg',
+              Card(
+                child: HealthTipCard(
+                  title: 'Health Tip One Here',
+                  imageUrl: 'assets/images/ob1.jpeg',
+                ),
               ),
-              HealthTipCard(
-                title: 'Proton pump inhib Gastric symptoms',
-                imageUrl: 'https://example.com/image2.jpg',
+              Card(
+                child: HealthTipCard(
+                  title: 'Health Tip Two Here',
+                  imageUrl: 'assets/images/ob2.jpeg',
+                ),
               ),
             ],
           ),

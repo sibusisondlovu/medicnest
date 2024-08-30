@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:patient_app/screens/home_screen.dart';
-import '../screens/create_account_screen.dart';
+import 'package:patient_app/screens/register_screen.dart';
+import '../screens/ask_question_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/get_started_screen.dart';
+import '../screens/login_screen.dart';
 import '../screens/medical_journey_screen.dart';
 import '../wrapper.dart';
 
@@ -18,8 +20,11 @@ class RouteGenerator {
       case GetStartedScreen.id:
         return _route(const GetStartedScreen());
 
-      case CreateAccountScreen.id:
-        return _route(const CreateAccountScreen());
+      case RegisterScreen.id:
+        return _route(const RegisterScreen());
+
+      case LoginScreen.id:
+        return _route((const LoginScreen()));
 
       case HomeScreen.id:
         return _route(const HomeScreen());
@@ -28,7 +33,10 @@ class RouteGenerator {
         return _route(const EditProfileScreen());
 
       case MedicalJourneyScreen.id:
-        return _route(const MedicalJourneyScreen());
+        return _route(MedicalJourneyScreen(data: args));
+
+      case AskQuestionScreen.id:
+        return _route(const AskQuestionScreen());
 
       default:
         return _errorRoute(settings.name);
