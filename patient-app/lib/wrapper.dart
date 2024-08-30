@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:patient_app/screens/home_screen.dart';
+import 'package:patient_app/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'config/strings.dart';

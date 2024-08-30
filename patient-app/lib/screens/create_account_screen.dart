@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../config/strings.dart';
 import '../config/theme.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -38,6 +37,72 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       print("Password: ${_passwordController.text}");
     }
   }
+  import 'package:awesome_dialog/awesome_dialog.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
+  import 'package:firebase_auth/firebase_auth.dart';
+  import 'package:flutter/material.dart';
+
+// ... your existing code ...
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Submit the form or perform final action
+      print("Name: ${_nameController.text}");
+      print("Email: ${_emailController.text}");
+      print("Phone: ${_phoneController.text}");
+      print("Password: ${_passwordController.text}");
+
+      try {
+        // Create user with Firebase Authentication
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        // Save user data to Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'name': _nameController.text,
+          'email': _emailController.text,
+          'phone': _phoneController.text,
+        });
+
+        // Show Awesome Dialog with success message and login button
+        AwesomeDialog(
+          context: context,
+          dialogType: DialogType.success,
+          animType: AnimType.bottomSlide,
+          title: 'Account Created!',
+          desc: 'Your account has been created successfully.',
+          btnOkText: 'Login',
+          btnOkOnPress: () {
+            // Navigate to login screen
+            Navigator.pushReplacementNamed(context, '/login');
+          },
+        ).show();
+      } on FirebaseAuthException catch (e) {
+        // Handle Firebase Authentication errors
+        String errorMessage = 'An error occurred. Please try again.';
+        if (e.code == 'weak-password') {
+          errorMessage = 'The password provided is too weak.';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'The account already exists for that email.';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorMessage)),
+        );
+      } catch (e) {
+        // Handle other errors
+        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred. Please try again.')),
+        );
+      }
+    }
+  }
   void _previousPage() {
     if (_currentPage > 0) {
       _pageController.previousPage(
@@ -55,12 +120,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 30),
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [AppTheme.mainColor,AppTheme.ascentColor, ],
-        )),
+
         child: Column(
           children: [
             Row(
@@ -89,21 +149,28 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
   Widget _buildNamePage() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(5.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const Text(
             'Enter your name and surname',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 16),
-          TextField(
-            controller: _nameController,
+          TextFormField(
             decoration: const InputDecoration(
-              labelText: 'Name and Surname',
-              border: OutlineInputBorder(),
+              labelText: 'Full Names',
+              prefixIcon: Icon(Icons.person),
+              border: UnderlineInputBorder(),
             ),
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your full names';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16),
           _buildNavigationButtons(),
@@ -120,14 +187,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         children: <Widget>[
           const Text(
             'Enter your email address',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 16),
-          TextField(
+          TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(),
+              labelText: 'Email Address',
+              prefixIcon: Icon(Icons.email),
+              border: UnderlineInputBorder(),
             ),
             keyboardType: TextInputType.emailAddress,
           ),
@@ -146,14 +214,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         children: <Widget>[
           const Text(
             'Enter your phone number',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 16),
-          TextField(
+          TextFormField(
             controller: _phoneController,
             decoration: const InputDecoration(
-              labelText: 'Phone Number',
-              border: OutlineInputBorder(),
+              labelText: 'Contact Number',
+              prefixIcon: Icon(Icons.phone_android),
+              border: UnderlineInputBorder(),
             ),
             keyboardType: TextInputType.phone,
           ),
@@ -172,14 +241,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         children: <Widget>[
           const Text(
             'Create a password',
-            style: TextStyle(fontSize: 24),
+            style: TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 16),
-          TextField(
+          TextFormField(
             controller: _passwordController,
             decoration: const InputDecoration(
               labelText: 'Password',
-              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.lock),
+              border: UnderlineInputBorder(),
             ),
             obscureText: true,
           ),
