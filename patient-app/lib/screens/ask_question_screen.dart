@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:patient_app/config/theme.dart';
@@ -35,17 +36,50 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ask A Question'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: ListView(
-          children: [_buildEasyStepper(),
-            activeStep == 0? _buildAskQuestionTile():
-            activeStep == 1? _buildWaitForReplyTile():
-            _buildDoctorReplyTile(),
-          ],
+
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.mainColor,
+              AppTheme.ascentColor,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ListView(
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back_ios_rounded,
+                        color: Colors.white),
+                  ),
+                  const Expanded(
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      'ASK QUESTION',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20,),
+              _buildEasyStepper(),
+              activeStep == 0? _buildAskQuestionTile():
+              activeStep == 1? _buildWaitForReplyTile():
+              _buildDoctorReplyTile(),
+            ],
+          ),
         ),
       ),
     );
@@ -63,7 +97,7 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
         unreachedLineType: LineType.dashed,
       ),
       stepShape: StepShape.circle,
-      activeStepBackgroundColor: AppTheme.mainColor,
+      activeStepBackgroundColor: AppTheme.ascentColor,
       stepBorderRadius: 15,
       borderThickness: 2,
       internalPadding: 10,
@@ -72,10 +106,10 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
         vertical: 20,
       ),
       stepRadius: 28,
-      finishedStepBorderColor: AppTheme.mainColor,
-      finishedStepTextColor: AppTheme.mainColor,
-      finishedStepBackgroundColor: AppTheme.mainColor,
-      activeStepIconColor: AppTheme.mainColor,
+      finishedStepBorderColor: AppTheme.ascentColor,
+      finishedStepTextColor: AppTheme.ascentColor,
+      finishedStepBackgroundColor: AppTheme.ascentColor,
+      activeStepIconColor: AppTheme.ascentColor,
       showLoadingAnimation: false,
       steps: [
         EasyStep(
@@ -85,6 +119,10 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
             color: activeStep >= 0 ? Colors.white : Colors.grey,
           ),),
           customTitle: const Text(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 13
+            ),
             'Describe',
             textAlign: TextAlign.center,
           ),
@@ -93,9 +131,13 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
           customStep: Text('2', style: TextStyle(
             fontSize: activeStep >= 1 ? 22 : 15,
             fontWeight: activeStep >= 1 ? FontWeight.bold : FontWeight.normal,
-            color: activeStep >= 1 ? AppTheme.ascentColor : Colors.grey,
+            color: activeStep >= 1 ? Colors.white : Colors.grey,
           ),),
           customTitle: const Text(
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 13
+            ),
             'Get Reply',
             textAlign: TextAlign.center,
           ),
@@ -107,6 +149,10 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
             color: activeStep >= 2 ? AppTheme.ascentColor : Colors.grey,
           ),),
           customTitle: const Text(
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 13
+            ),
             'Doctor Reply',
             textAlign: TextAlign.center,
           ),
@@ -153,7 +199,8 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
           _isSaving = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please describe your symptoms.')),
+          const SnackBar(content: Text('Please describe your symptoms.',
+          )),
         );
       }
     }
@@ -204,12 +251,18 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
   Widget _buildAskQuestionTile() {
     return Column(
       children: [
-        const Text('Describe your symptoms and how you feel'),
+        const Text('Describe your symptoms and how you feel',style: TextStyle(
+            color: Colors.white,
+            fontSize: 14
+        ),),
+        const SizedBox(height: 10,),
         TextFormField(
           controller: symptomController,
           minLines: 5, // Minimum number of lines
           maxLines: null, // Allow unlimited lines (optional)
           decoration: const InputDecoration(
+            fillColor: Colors.white70,
+            filled: true,
             hintText: 'Eg. I am having a fever', // Placeholder text
             border: OutlineInputBorder(
               borderSide: BorderSide(width: 2.0), // Thick border
@@ -274,19 +327,21 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
       children: [
         const Text(
           textAlign: TextAlign.center,
-          'Thank you for describing your symptoms, a doctor will send a reply to you',
+          'Thank you for describing your \nsymptoms, a doctor will \nsend a reply to you',
         style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white
         ),),
         const SizedBox(height: 10,),
         const Text('*Note that this can take up to a day',
         style: TextStyle(
           fontWeight: FontWeight.w100,
           fontStyle: FontStyle.italic,
+          color: Colors.white,
           fontSize: 13
         ),),
-        const SizedBox(height: 10,),
+        const SizedBox(height: 30,),
         const Card(
           child: Padding(
             padding: EdgeInsets.all(15.0),

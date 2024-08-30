@@ -1,4 +1,5 @@
 List<String> regionsList = [
+  'Select Area',
   'Alberton',
   'Bedfordview',
   'Benoni',

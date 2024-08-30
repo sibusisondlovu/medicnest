@@ -22,6 +22,10 @@ class AppTheme {
       iconTheme: const IconThemeData(
         color: mainColor, // Or a different color for dark theme
       ),
+    snackBarTheme: const SnackBarThemeData(
+      backgroundColor: AppTheme.mainColor,
+
+    ),
     appBarTheme: const AppBarTheme(
       elevation: 0,
       backgroundColor: Colors.transparent,

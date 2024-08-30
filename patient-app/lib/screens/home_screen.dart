@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'Fill in your details before consulting with our health practitioners.',
       btnOkText: 'Proceed',
       btnOkOnPress: () {
-        Navigator.pushNamed(context, 'editProfile');
+        Navigator.pushNamed(context, 'editProfileScreen');
       },
     ).show();
   }
