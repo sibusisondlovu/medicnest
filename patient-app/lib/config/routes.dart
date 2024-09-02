@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:patient_app/screens/alerts_screen.dart';
+import 'package:patient_app/screens/chats_screen.dart';
 import 'package:patient_app/screens/home_screen.dart';
+import 'package:patient_app/screens/main_layout_screen.dart';
+import 'package:patient_app/screens/profile_screen.dart';
 import 'package:patient_app/screens/register_screen.dart';
 import '../screens/ask_question_screen.dart';
 import '../screens/edit_profile_screen.dart';
@@ -26,8 +30,20 @@ class RouteGenerator {
       case LoginScreen.id:
         return _route((const LoginScreen()));
 
+      case MainLayout.id:
+        return _route(const MainLayout());
+
       case HomeScreen.id:
         return _route(const HomeScreen());
+
+      case ChatsScreen.id:
+        return _route(const ChatsScreen());
+
+      case AlertsScreen.id:
+        return _route(const AlertsScreen());
+
+      case ProfileScreen.id:
+        return _route(const ProfileScreen());
 
       case EditProfileScreen.id:
         return _route(const EditProfileScreen());

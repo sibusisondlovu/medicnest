@@ -31,10 +31,109 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
   bool _isUploading = false;
   bool _isMediaUploaded = false;
   bool _isSaving = false;
+  bool _isLoading = true;
+  DocumentSnapshot? questionDoc;
   final TextEditingController symptomController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _loadQuestionData();
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return months[month - 1];
+  }
+
+  void _cancelRequest(context) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('questions')
+            .doc(user.uid)
+            .delete();
+
+        setState(() {
+          activeStep = 0;
+          symptomController.clear();
+          _uploadedFileUrl = null;
+          _isMediaUploaded = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Request cancelled successfully!')),
+        );
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error cancelling request: $e');
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error cancelling request. Please try again.')),
+        );
+      }
+    }
+  }
+
+  Future<void> _loadQuestionData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        final docSnapshot = await FirebaseFirestore.instance
+            .collection('questions')
+            .doc(user.uid)
+            .get();
+
+        setState(() {
+          questionDoc = docSnapshot;
+          if (docSnapshot.exists) {
+            final data = docSnapshot.data() as Map<String, dynamic>;
+            final stage = data['stage'] as String?;
+            switch (stage) {
+              case 'describe':
+                activeStep = 0;
+                break;
+              case 'get-reply':
+                activeStep = 1;
+                break;
+              case 'doctor-reply':
+                activeStep = 2;
+                break;
+              default:
+                activeStep = 0;
+            }
+            symptomController.text = data['symptom'] as String? ?? '';
+            _uploadedFileUrl = data['media'] as String?;
+            _isMediaUploaded = _uploadedFileUrl != null;
+          }
+          _isLoading = false;
+        });
+      } catch (e) {
+        if (kDebugMode) {
+          print('Error loading question data: $e');
+        }
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: LoadingScreen()),
+      );
+    }
     return Scaffold(
 
       body: Container(
@@ -73,7 +172,7 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 20,),
+              const SizedBox(height: 20,),
               _buildEasyStepper(),
               activeStep == 0? _buildAskQuestionTile():
               activeStep == 1? _buildWaitForReplyTile():
@@ -323,6 +422,13 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
   }
 
   Widget _buildWaitForReplyTile() {
+    final data = questionDoc?.data() as Map<String, dynamic>?;
+    final symptom = data?['symptom'] as String? ?? '';
+    final timestamp = data?['timestamp'] as Timestamp?;
+    final formattedDate = timestamp != null
+        ? '${timestamp.toDate().day} ${_getMonthName(timestamp.toDate().month)} ${timestamp.toDate().year} at ${timestamp.toDate().hour}h${timestamp.toDate().minute.toString().padLeft(2, '0')}'
+        : '';
+
     return Column(
       children: [
         const Text(
@@ -342,26 +448,26 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
           fontSize: 13
         ),),
         const SizedBox(height: 30,),
-        const Card(
+        Card(
           child: Padding(
             padding: EdgeInsets.all(15.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(textAlign: TextAlign.center, 'Your Symptoms/Feelings', style: TextStyle(
+                const Text(textAlign: TextAlign.center, 'Your Symptoms/Feelings', style: TextStyle(
                     fontWeight: FontWeight.w700,
 
                     fontSize: 13
                 ),),
-                SizedBox(height: 10,),
-                Text('fsdffsfsfsdfsdffdfdfdsfffsdf',
-                    style: TextStyle(
+                const SizedBox(height: 10,),
+                Text(symptom,
+                    style: const TextStyle(
                         fontWeight: FontWeight.w100,
                         fontSize: 13
                     )),
-                SizedBox(height: 10,),
-                Text('30 August 2024 at 23h43',
-                    style: TextStyle(
+                const SizedBox(height: 10,),
+                Text(formattedDate,
+                    style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         color: Colors.grey,
                         fontStyle: FontStyle.italic,
@@ -375,7 +481,8 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
             style: TextStyle(
                 fontWeight: FontWeight.w100,
                 fontStyle: FontStyle.italic,
-                fontSize: 12
+                fontSize: 12,
+              color: Colors.white
             )),
         const SizedBox(height: 30,),
         RichText(
@@ -385,12 +492,12 @@ class _AskQuestionScreenState extends State<AskQuestionScreen> {
               const TextSpan(
                 text: 'Feeling better already? Click to ',
                 style: TextStyle(
-                    color: Colors.black, fontSize: 14),
+                    color: Colors.white, fontSize: 14),
               ),
               TextSpan(
                 text: 'CANCEL REQUEST',
                 style: const TextStyle(
-                    color: AppTheme.mainColor,
+                    color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold),
                 recognizer: TapGestureRecognizer()

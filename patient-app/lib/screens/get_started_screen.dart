@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patient_app/widgets/buttons.dart';
 
 import '../config/strings.dart';
 import '../config/theme.dart';
@@ -63,23 +64,17 @@ class GetStartedScreen extends StatelessWidget {
                     const SizedBox(height: 100),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
+                      child: CustomElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, 'createAccountScreen');
+                          Navigator.pushNamed(context, 'registerScreen');
                         },
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: AppTheme.mainColor,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16.0, horizontal: 32.0),
-                        ),
-                        child: const Text('CREATE ACCOUNT'),
+                        text: 'CREATE ACCOUNT',
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
                       onPressed: () {
-                        // Navigate to sign-in screen
+                        Navigator.pushNamed(context, 'loginScreen');
                       },
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white, // Text color

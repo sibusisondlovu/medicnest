@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:patient_app/controllers/main_layout_notifier.dart';
+import 'package:provider/provider.dart';
 import 'config/theme.dart';
 import 'config/routes.dart';
 import 'screens/edit_profile_screen.dart';
@@ -15,7 +17,11 @@ Future<void> main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp( const MyApp());
+    runApp( MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context)=> MainLayoutNotifier())
+        ],
+        child: const MyApp()));
   });
 }
 

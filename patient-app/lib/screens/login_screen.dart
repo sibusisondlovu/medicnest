@@ -176,9 +176,11 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _emailAddress.text.trim(),
           password: _passwordController.text.trim(),
         );
-
-        // Login successful, replace all screens with home screen
-        Navigator.pushReplacementNamed(context, 'homeScreen');
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          'mainLayout',
+              (Route<dynamic> route) => false,
+        );
       } on FirebaseAuthException catch (e) {
         // Handle Firebase Authentication errors
         String errorMessage = 'An error occurred. Please try again.';
