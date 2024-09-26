@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:patient_app/screens/home_screen.dart';
 import 'package:patient_app/screens/login_screen.dart';
 import 'package:patient_app/screens/register_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'config/theme.dart';
 import 'screens/onboarding_screen.dart';
