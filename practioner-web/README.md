@@ -1,2 +1,0 @@
-# MedicNest - Practioner Web App
-

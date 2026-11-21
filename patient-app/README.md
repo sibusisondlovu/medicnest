@@ -1,3 +1,0 @@
-# MedicNest
-
-MedicNest Patient App

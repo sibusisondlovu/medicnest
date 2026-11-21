@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Medicnest — Launching soon</title>
+<meta name="description" content="Medicnest helps doctors finish notes and referrals faster, and helps patients understand their prescriptions and find the right care. Join the waiting list.">
+<meta property="og:title" content="Medicnest — Launching soon">
+<meta property="og:description" content="Smarter notes and referrals for doctors. Clear prescriptions and care guidance for patients. Join the waiting list.">
+<script>
+/* ===== CONFIGURATION — fill before going live ===== */
+window.MN_CONFIG = {
+  GA4_ID: "",                 // e.g. "G-XXXXXXXXXX"
+  WAITLIST_ENDPOINT: "",      // e.g. "https://api.medicnest.co.za/api/v1/waitlist"
+  CHAT_ENDPOINT: "",          // e.g. "https://api.medicnest.co.za/api/v1/site-chat"
+  CONSENT_VERSION: "wl-2026-11"
+};
+</script>
+<script>
+(function(){
+  var id = window.MN_CONFIG.GA4_ID;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  if (id) {
+    var s = document.createElement('script'); s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + id;
+    document.head.appendChild(s);
+    gtag('js', new Date()); gtag('config', id);
+  }
+})();
+</script>
+<style>
+:root{
+  --teal:#0E7C7B; --teal-d:#095857; --teal-l:#E6F4F3; --mint:#CDEBE7;
+  --ink:#16302F; --muted:#5B6E6D; --line:#D7E4E2; --bg:#F7FBFA; --white:#fff;
+  --red:#BD0602; --amber:#B26A00;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Segoe UI",Roboto,Arial,Helvetica,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--teal)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{padding:18px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;letter-spacing:-.2px}
+.brand small{font-weight:500;color:var(--muted);font-size:13px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--teal);display:grid;place-items:center}
+.hero{padding:28px 0 18px;text-align:center}
+.pill{display:inline-flex;align-items:center;gap:8px;background:var(--teal-l);color:var(--teal-d);border:1px solid var(--mint);font-weight:600;font-size:13px;padding:6px 14px;border-radius:999px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(14,124,123,.5)}70%{box-shadow:0 0 0 8px rgba(14,124,123,0)}100%{box-shadow:0 0 0 0 rgba(14,124,123,0)}}
+h1{font-size:clamp(30px,5.2vw,50px);line-height:1.1;margin:18px auto 12px;max-width:780px;letter-spacing:-.8px}
+.lead{font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:640px;margin:0 auto}
+.choose{margin:26px auto 8px;font-weight:600;color:var(--ink)}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:10px 0 40px}
+.path{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;transition:border-color .2s, box-shadow .2s}
+.path.active{border-color:var(--teal);box-shadow:0 10px 30px rgba(14,124,123,.12)}
+.path h2{margin:10px 0 6px;font-size:22px}
+.path .ic{width:48px;height:48px;border-radius:14px;background:var(--teal-l);display:grid;place-items:center}
+.path p.sub{margin:0 0 14px;color:var(--muted)}
+.path ul{list-style:none;padding:0;margin:0 0 18px}
+.path li{display:flex;gap:10px;margin:9px 0;font-size:15px}
+.path li svg{flex:none;margin-top:3px}
+.btn{appearance:none;border:0;border-radius:12px;background:var(--teal);color:#fff;font-weight:700;font-size:16px;padding:14px 18px;cursor:pointer;width:100%;font-family:inherit}
+.btn:hover{background:var(--teal-d)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn.ghost{background:var(--white);color:var(--teal);border:1.5px solid var(--teal)}
+.btn.ghost:hover{background:var(--teal-l)}
+form{display:none;margin-top:4px}
+.path.active form{display:block}
+.path.active .open{display:none}
+label{display:block;font-size:14px;font-weight:600;margin:12px 0 5px}
+input[type=text],input[type=email],input[type=tel]{width:100%;font:inherit;font-size:16px;padding:12px 13px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(14,124,123,.15)}
+.err{color:var(--red);font-size:13px;min-height:18px;margin-top:3px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);margin:14px 0 6px;font-weight:400}
+.consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--teal);flex:none}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.thanks{display:none;text-align:center;padding:10px 4px}
+.thanks h3{margin:10px 0 6px;font-size:20px}
+.thanks p{color:var(--muted);margin:0 0 14px}
+.done form{display:none!important}
+.done .thanks{display:block}
+.done .open{display:none}
+.trust{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;color:var(--muted);font-size:14px;padding:0 0 30px}
+.trust span{display:flex;gap:7px;align-items:center}
+footer{border-top:1px solid var(--line);padding:22px 0 90px;color:var(--muted);font-size:13px;text-align:center}
+footer p{margin:4px 0}
+@media (max-width:760px){.paths{grid-template-columns:1fr}.path{padding:20px}}
+
+/* Chat */
+.fab{position:fixed;right:18px;bottom:18px;z-index:50;display:flex;align-items:center;gap:10px;background:var(--teal);color:#fff;border:0;border-radius:999px;padding:13px 18px 13px 14px;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(9,88,87,.35)}
+.fab:hover{background:var(--teal-d)}
+.fab .badge{position:absolute;top:-4px;right:-2px;width:14px;height:14px;border-radius:50%;background:#F5A623;border:2px solid #fff}
+.chat{position:fixed;right:18px;bottom:84px;z-index:60;width:min(380px,calc(100vw - 24px));height:min(560px,calc(100vh - 110px));background:#fff;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.22);display:none;flex-direction:column;overflow:hidden;border:1px solid var(--line)}
+.chat.open{display:flex}
+.chat-h{background:var(--teal);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.chat-h b{display:block;font-size:15px}.chat-h small{opacity:.85;font-size:12px}
+.chat-h button{margin-left:auto;background:transparent;border:0;color:#fff;cursor:pointer;padding:4px}
+.msgs{flex:1;overflow-y:auto;padding:14px;background:var(--bg)}
+.m{max-width:85%;padding:10px 13px;border-radius:14px;margin:6px 0;font-size:14.5px;white-space:pre-line}
+.m.bot{background:#fff;border:1px solid var(--line);border-bottom-left-radius:4px}
+.m.me{background:var(--teal);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.m.warn{border-color:#F3C0BE;background:#FFF5F5}
+.quick{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 6px}
+.quick button{font:inherit;font-size:13px;background:#fff;border:1px solid var(--mint);color:var(--teal-d);border-radius:999px;padding:6px 11px;cursor:pointer}
+.quick button:hover{background:var(--teal-l)}
+.typing{display:inline-flex;gap:4px;padding:12px 14px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:b 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,100%{opacity:.3}50%{opacity:1}}
+.chat-f{display:flex;gap:8px;padding:10px;border-top:1px solid var(--line);background:#fff}
+.chat-f input{flex:1;padding:11px 12px;font-size:15px}
+.chat-f button{flex:none;width:46px;border-radius:10px;border:0;background:var(--teal);color:#fff;cursor:pointer;display:grid;place-items:center}
+.chat-note{font-size:11.5px;color:var(--muted);text-align:center;padding:0 10px 8px;background:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap brand">
+    <div class="logo" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </div>
+    Medicnest <small>by Jaspa</small>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="pill"><span class="dot"></span>Launching soon in South Africa</span>
+    <h1>Better notes for doctors. Clearer care for patients.</h1>
+    <p class="lead">Medicnest turns handwritten consultation notes into clean records and referrals — and helps patients understand their prescriptions and find the right care nearby.</p>
+    <p class="choose">Join the waiting list. Who are you?</p>
+  </section>
+
+  <section class="paths">
+    <!-- Practitioner -->
+    <article class="path" id="path-practitioner" data-role="practitioner">
+      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 2v2M5 2v2M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></svg></div>
+      <h2>I'm a health practitioner</h2>
+      <p class="sub">GPs, specialists and practice teams</p>
+      <ul>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Write by hand on a tablet — AI turns it into a structured note you approve</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Referral letters in a tap, tracked until feedback comes back</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Be listed where nearby patients look for a GP</li>
+      </ul>
+      <button class="btn open" type="button" data-open="practitioner">Join as a practitioner</button>
+      <form novalidate data-role="practitioner"></form>
+      <div class="thanks"></div>
+    </article>
+
+    <!-- Patient -->
+    <article class="path" id="path-patient" data-role="patient">
+      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></div>
+      <h2>I'm a patient</h2>
+      <p class="sub">Or caring for someone who is</p>
+      <ul>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Scan a prescription and see what each medicine is, in plain language</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Describe how you feel — by typing, voice note or photo — and get clear next steps</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Find GPs near you, with directions and opening hours</li>
+      </ul>
+      <button class="btn open" type="button" data-open="patient">Join as a patient</button>
+      <form novalidate data-role="patient"></form>
+      <div class="thanks"></div>
+    </article>
+  </section>
+
+  <div class="trust">
+    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Built with POPIA in mind</span>
+    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>Doctors stay in control</span>
+    <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Made in South Africa</span>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Medicnest is not for emergencies. In an emergency call <b>10177</b> (ambulance) or <b>112</b> from a cell phone.</p>
+    <p>Medicnest does not diagnose and does not replace your doctor.</p>
+    <p>© <span id="yr"></span> Jaspa Innovate (Pty) Ltd · The Innovation Hub, Pretoria</p>
+  </div>
+</footer>
+
+<!-- Chat -->
+<button class="fab" id="fab" type="button" aria-controls="chat" aria-expanded="false">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
+  Ask Medicnest<span class="badge" aria-hidden="true"></span>
+</button>
+<section class="chat" id="chat" role="dialog" aria-label="Medicnest assistant">
+  <div class="chat-h">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg>
+    <div><b>Medicnest assistant</b><small>Ask what's coming</small></div>
+    <button type="button" id="chatClose" aria-label="Close chat"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+  <form class="chat-f" id="chatForm" autocomplete="off" style="display:flex">
+    <input type="text" id="chatInput" maxlength="400" placeholder="Type your question…" aria-label="Your question">
+    <button type="submit" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></button>
+  </form>
+  <div class="chat-note">Product information only — not medical advice.</div>
+</section>
+
+<script>
+(function(){
+  var C = window.MN_CONFIG;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ---------- Analytics (no personal data ever) ---------- */
+  var utm = {};
+  try {
+    var q = new URLSearchParams(location.search);
+    ['utm_source','utm_medium','utm_campaign'].forEach(function(k){ if (q.get(k)) utm[k.replace('utm_','')] = q.get(k).slice(0,100); });
+    if (Object.keys(utm).length) sessionStorage.setItem('mn_utm', JSON.stringify(utm));
+    else utm = JSON.parse(sessionStorage.getItem('mn_utm') || '{}');
+  } catch(e) {}
+  function track(name, params){
+    try { gtag('event', name, Object.assign({}, params || {}, {utm_source: utm.source || '(direct)'})); } catch(e) {}
+  }
+
+  /* ---------- Waiting-list forms ---------- */
+  var formHTML = function(role){
+    var p = role === 'practitioner';
+    return '' +
+      '<label for="n-'+role+'">Full name</label>' +
+      '<input type="text" id="n-'+role+'" name="full_name" autocomplete="name" maxlength="80" placeholder="'+(p?'Dr Thabo Mokoena':'Nomsa Dlamini')+'">' +
+      '<div class="err" data-for="full_name"></div>' +
+      '<label for="w-'+role+'">WhatsApp number</label>' +
+      '<input type="tel" id="w-'+role+'" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="082 123 4567">' +
+      '<div class="err" data-for="whatsapp"></div>' +
+      '<label for="e-'+role+'">Email address</label>' +
+      '<input type="email" id="e-'+role+'" name="email" autocomplete="email" placeholder="you@example.com">' +
+      '<div class="err" data-for="email"></div>' +
+      '<div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>' +
+      '<label class="consent"><input type="checkbox" name="consent"> <span>I agree that Medicnest (by Jaspa) may contact me by WhatsApp and email about the launch. I can opt out at any time.</span></label>' +
+      '<div class="err" data-for="consent"></div>' +
+      '<button class="btn" type="submit">Join the waiting list</button>';
+  };
+  var thanksHTML = function(role){
+    var msg = role === 'practitioner'
+      ? 'We\u2019ll be in touch on WhatsApp about early access for practices.'
+      : 'We\u2019ll let you know on WhatsApp as soon as the app is ready.';
+    return '<svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#0E7C7B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>' +
+      '<h3>You\u2019re on the list!</h3><p>'+msg+'</p>' +
+      '<button class="btn ghost" type="button" data-share>Share Medicnest on WhatsApp</button>';
+  };
+
+  document.querySelectorAll('.path').forEach(function(card){
+    var role = card.dataset.role;
+    var form = card.querySelector('form');
+    form.innerHTML = formHTML(role);
+    card.querySelector('.thanks').innerHTML = thanksHTML(role);
+    var started = false;
+    form.addEventListener('input', function(){ if (!started){ started = true; track('form_started', {role: role}); } });
+    form.addEventListener('submit', function(ev){ ev.preventDefault(); submit(form, card, role); });
+    card.querySelector('[data-share]').addEventListener('click', function(){
+      track('share_clicked', {role: role});
+      var text = 'Medicnest is launching soon \u2014 better notes for doctors and clearer care for patients. Join the waiting list: ' + location.origin + location.pathname;
+      window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener');
+    });
+  });
+
+  function openPath(role){
+    document.querySelectorAll('.path').forEach(function(c){ c.classList.toggle('active', c.dataset.role === role); });
+    var card = document.getElementById('path-' + role);
+    card.scrollIntoView({behavior:'smooth', block:'start'});
+    setTimeout(function(){ var i = card.querySelector('input'); if (i) i.focus({preventScroll:true}); }, 350);
+    track('path_selected', {role: role});
+  }
+  document.querySelectorAll('[data-open]').forEach(function(b){ b.addEventListener('click', function(){ openPath(b.dataset.open); }); });
+
+  function normaliseWhatsApp(v){
+    var d = (v || '').replace(/[^\d+]/g, '');
+    if (d.indexOf('00') === 0) d = '+' + d.slice(2);
+    if (/^0\d{9}$/.test(d)) d = '+27' + d.slice(1);
+    if (/^27\d{9}$/.test(d)) d = '+' + d;
+    return /^\+\d{9,15}$/.test(d) ? d : null;
+  }
+  function validate(f){
+    var e = {};
+    var name = f.full_name.value.trim();
+    if (name.length < 2 || name.length > 80) e.full_name = 'Please enter your full name.';
+    if (!normaliseWhatsApp(f.whatsapp.value)) e.whatsapp = 'Please enter a valid WhatsApp number, e.g. 082 123 4567.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.value.trim())) e.email = 'Please enter a valid email address.';
+    if (!f.consent.checked) e.consent = 'Please tick the box so we can contact you.';
+    return e;
+  }
+  function showErrors(form, errs){
+    form.querySelectorAll('.err').forEach(function(el){ el.textContent = errs[el.dataset.for] || ''; });
+    var first = Object.keys(errs)[0];
+    if (first) { var fld = form.querySelector('[name="'+first+'"]'); if (fld) fld.focus(); }
+  }
+  function submit(form, card, role){
+    var f = form.elements, errs = validate(f);
+    showErrors(form, errs);
+    if (Object.keys(errs).length) return;
+    var btn = form.querySelector('button[type=submit]');
+    btn.disabled = true; btn.textContent = 'Joining…';
+    var payload = {
+      role: role,
+      full_name: f.full_name.value.trim(),
+      whatsapp: normaliseWhatsApp(f.whatsapp.value),
+      email: f.email.value.trim().toLowerCase(),
+      consent: true,
+      consent_version: C.CONSENT_VERSION,
+      utm: utm,
+      page_url: location.href.slice(0,255),
+      website: f.website.value
+    };
+    var done = function(){
+      card.classList.add('done');
+      track('waitlist_joined', {role: role});
+    };
+    if (!C.WAITLIST_ENDPOINT) {
+      try {
+        var list = JSON.parse(localStorage.getItem('mn_waitlist_preview') || '[]');
+        list.push(Object.assign({saved_at: new Date().toISOString()}, payload));
+        localStorage.setItem('mn_waitlist_preview', JSON.stringify(list));
+      } catch(e) {}
+      console.warn('Medicnest preview: WAITLIST_ENDPOINT is not set; sign-up kept in this browser only.');
+      setTimeout(done, 400); return;
+    }
+    fetch(C.WAITLIST_ENDPOINT, {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(payload)})
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ return {ok:r.ok, status:r.status, body:j}; }); })
+      .then(function(res){
+        if (res.ok) return done();
+        if (res.status === 422 && res.body && res.body.errors) {
+          var e = {}; Object.keys(res.body.errors).forEach(function(k){ e[k] = [].concat(res.body.errors[k])[0]; });
+          showErrors(form, e);
+        } else {
+          showErrors(form, {consent: 'Something went wrong. Please try again in a moment.'});
+        }
+        btn.disabled = false; btn.textContent = 'Join the waiting list';
+      })
+      .catch(function(){
+        showErrors(form, {consent: 'We couldn\u2019t reach our server. Check your connection and try again.'});
+        btn.disabled = false; btn.textContent = 'Join the waiting list';
+      });
+  }
+
+  /* ---------- Chat ---------- */
+  var fab = document.getElementById('fab'), chat = document.getElementById('chat'),
+      msgs = document.getElementById('msgs'), input = document.getElementById('chatInput'),
+      history = [], greeted = false;
+
+  var QUICK = ['What is Medicnest?', 'What\u2019s coming for doctors?', 'What\u2019s coming for patients?', 'When do you launch?', 'Is my data safe?', 'Join the waiting list'];
+
+  var EMERGENCY = /(chest pain|can'?t breathe|cannot breathe|not breathing|difficulty breathing|short(ness)? of breath|stroke|unconscious|fainted|seizure|fitting|severe bleeding|bleeding (a lot|heavily)|overdose|poison|suicid|kill myself|end my life|self[- ]?harm|swollen (face|throat|tongue)|anaphyla)/i;
+  var HEALTH = /(pain|sore|fever|cough|rash|headache|vomit|diarrh|dizzy|sick|\bill\b|symptom|infection|bleed|swell|itch|lump|medicine|medication|pill|dose|dosage|antibiotic|should i take|what should i take|pregnan|diagnos|blood pressure|sugar|diabet|asthma|hiv|tb\b|treat)/i;
+
+  var ANSWERS = [
+    {k:/(what is|about|who are|what do you do|explain)/i, a:'Medicnest is a South African health app built by Jaspa.\n\nFor doctors: write notes by hand on a tablet, and AI turns them into clean, structured records and referral letters that the doctor checks and approves.\n\nFor patients: scan a prescription to understand it, get clear guidance on how urgently to see a doctor, and find GPs nearby.'},
+    {k:/(doctor|gp|practi|clinic|specialist|referr|notes?|handwrit|tablet|stylus)/i, a:'Coming for practitioners:\n\u2022 Handwriting to notes \u2014 write with a stylus as you do now; AI drafts a structured note with unclear words, medicines and doses flagged. Nothing is final until you approve it.\n\u2022 Referral letters and prescription drafts from the approved note.\n\u2022 A referral network so you can see when a referral is received, booked and when feedback returns.\n\u2022 A listing in Find a GP so nearby patients can find your practice.\n\nWe\u2019re starting with a small group of GPs in Tshwane \u2014 join the practitioner waiting list to be considered.'},
+    {k:/(patient|prescription|script|scan|decode|assistant|find a gp|near|nearby|voice|photo)/i, a:'Coming for patients:\n\u2022 Prescription decoder \u2014 snap a photo of your script and see each medicine in plain language, with anything unclear clearly marked. Always confirm with your pharmacist.\n\u2022 Health Assistant \u2014 describe how you feel by typing, voice note or photo. It tells you how urgently to get care (emergency, today, in a few days, or self-care) and what to tell the doctor. It does not diagnose.\n\u2022 Find a GP \u2014 nearby GPs with directions and opening hours.\n\nIt\u2019s free for patients.'},
+    {k:/(when|launch|release|available|date|soon|download|play store|iphone|ios|android)/i, a:'We\u2019re launching soon. First a small testing group (Android), then a wider release. iPhone comes later.\n\nJoin the waiting list and we\u2019ll message you on WhatsApp when it\u2019s your turn.'},
+    {k:/(data|privacy|private|popia|safe|secure|security|share|sell)/i, a:'Your privacy matters to us:\n\u2022 Medicnest is being built to meet POPIA.\n\u2022 Health information is encrypted and only shared when you agree.\n\u2022 We never sell your data.\n\u2022 Waiting-list details are used only to tell you about the launch, and you can opt out at any time.'},
+    {k:/(cost|price|pay|free|subscription|how much|fee)/i, a:'Medicnest will be free for patients. Practices will pay a monthly subscription \u2014 early waiting-list practices will hear about pilot pricing first.'},
+    {k:/(join|wait|sign ?up|register|list)/i, a:'__JOIN__'},
+    {k:/(jaspa|company|who built|team)/i, a:'Medicnest is built by Jaspa Innovate, a South African software company based at The Innovation Hub in Pretoria. Practising clinicians advise us on clinical safety and HPCSA guidelines.'},
+    {k:/(hi|hello|hey|sawubona|dumela|molo|howzit|good (morning|afternoon|evening))/i, a:'Hello! \ud83d\udc4b Ask me anything about Medicnest \u2014 what\u2019s coming for doctors or patients, when we launch, or how we protect your data.'}
+  ];
+  var FALLBACK = 'Good question! I can tell you about Medicnest\u2019s features for doctors and patients, our launch, pricing and privacy. What would you like to know?';
+  var NO_ADVICE = 'I\u2019m sorry \u2014 I can\u2019t give medical advice here. Please speak to a doctor, nurse or pharmacist about this.\n\nIf it\u2019s serious or getting worse, don\u2019t wait.';
+  var EMERG = '\u26a0\ufe0f This sounds like it could be an emergency. Please get help now:\n\u2022 Ambulance: 10177\n\u2022 From a cell phone: 112\n\u2022 Or go to your nearest emergency unit.\n\nI can\u2019t give medical advice.';
+
+  function add(text, who, cls){
+    var d = document.createElement('div'); d.className = 'm ' + who + (cls ? ' ' + cls : '');
+    d.textContent = text; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
+  }
+  function quick(){
+    var q = document.createElement('div'); q.className = 'quick';
+    QUICK.forEach(function(t){
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = t;
+      b.onclick = function(){ send(t); }; q.appendChild(b);
+    });
+    msgs.appendChild(q); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function joinPrompt(){
+    var d = add('Great! Which list would you like to join?', 'bot');
+    var q = document.createElement('div'); q.className = 'quick';
+    [['I\u2019m a health practitioner','practitioner'],['I\u2019m a patient','patient']].forEach(function(o){
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = o[0];
+      b.onclick = function(){ toggle(false); openPath(o[1]); }; q.appendChild(b);
+    });
+    msgs.appendChild(q); msgs.scrollTop = msgs.scrollHeight;
+  }
+  function local(text){
+    if (EMERGENCY.test(text)) return {t:EMERG, cls:'warn'};
+    if (HEALTH.test(text) && !/(medicnest|app|feature|coming|scan|decoder|assistant)/i.test(text)) return {t:NO_ADVICE, cls:'warn'};
+    for (var i = 0; i < ANSWERS.length; i++) if (ANSWERS[i].k.test(text)) return {t:ANSWERS[i].a};
+    return {t:FALLBACK};
+  }
+  function typing(){
+    var d = document.createElement('div'); d.className = 'm bot typing'; d.innerHTML = '<i></i><i></i><i></i>';
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
+  }
+  function reply(r){
+    if (r.t === '__JOIN__') return joinPrompt();
+    add(r.t, 'bot', r.cls);
+  }
+  function send(text){
+    text = (text || '').trim(); if (!text) return;
+    add(text, 'me'); history.push({role:'user', content:text}); input.value = '';
+    track('chat_message_sent');
+    var r = local(text);
+    var t = typing();
+    if (r.cls === 'warn' || r.t === '__JOIN__' || !C.CHAT_ENDPOINT) {
+      setTimeout(function(){ t.remove(); reply(r); history.push({role:'assistant', content:r.t}); }, 550);
+      return;
+    }
+    fetch(C.CHAT_ENDPOINT, {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({messages: history.slice(-10)})})
+      .then(function(res){ if (!res.ok) throw 0; return res.json(); })
+      .then(function(j){
+        t.remove();
+        var txt = (j && (j.reply || j.message)) || r.t;
+        add(txt, 'bot', j && j.emergency ? 'warn' : ''); history.push({role:'assistant', content:txt});
+      })
+      .catch(function(){ t.remove(); reply(r); history.push({role:'assistant', content:r.t}); });
+  }
+  function toggle(open){
+    var willOpen = open === undefined ? !chat.classList.contains('open') : open;
+    chat.classList.toggle('open', willOpen); fab.setAttribute('aria-expanded', willOpen);
+    var badge = fab.querySelector('.badge'); if (badge) badge.remove();
+    if (willOpen) {
+      track('chat_opened');
+      if (!greeted) {
+        greeted = true;
+        add('Hi! I\u2019m the Medicnest assistant. \ud83d\udc4b\n\nSomething good is coming: smarter notes and referrals for doctors, and for patients \u2014 prescriptions explained, guidance on when to see a doctor, and GPs near you.\n\nWhat would you like to know?', 'bot');
+        quick();
+      }
+      setTimeout(function(){ input.focus(); }, 100);
+    }
+  }
+  fab.addEventListener('click', function(){ toggle(); });
+  document.getElementById('chatClose').addEventListener('click', function(){ toggle(false); });
+  document.getElementById('chatForm').addEventListener('submit', function(e){ e.preventDefault(); send(input.value); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && chat.classList.contains('open')) toggle(false); });
+
+})();
+</script>
+</body>
+</html>
