@@ -82,12 +82,11 @@ explicit-only `autopilot` and `continuous`.
 ## Commands
 
 <!-- blueprint:onboarding-required -->
-For a standard Next.js project. Change or remove if you're using something else.
+Flutter mobile app in `mobile/` (Android first). Run these from `mobile/`.
 
-- Dev server: `npm run dev` (http://localhost:3000)
-- Build: `npm run build`
-- Production server: `npm run start`
-- Lint: `npm run lint`
+- Run on device/emulator: `flutter run`
+- Build: `flutter build apk --debug`
+- Lint: `flutter analyze`
 
 Testing is opt-in. If this project does not already have a unit test runner, run
 `/tests` or `$tests` to add one and update this section with the real test
